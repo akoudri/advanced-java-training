@@ -16,7 +16,12 @@ public class BinarySearch {
         mens.add(new Man("Paul", 53));
         mens.add(new Man("Joseph", 41));
         Collections.sort(mens, Comparator.comparingInt(Man::getAge));
-        //TODO: search for man having 41 years old
+        int index = Collections.binarySearch(mens, new Man("", 41), Comparator.comparingInt(Man::getAge));
+        if (index >= 0) {
+            System.out.println("Paul found at index: " + index);
+        } else {
+            System.out.println("Paul not found in the list.");
+        }
     }
 
     static class Man {

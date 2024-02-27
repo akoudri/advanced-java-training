@@ -16,9 +16,11 @@ public class Beatles {
                       filter(lang(?name) = "fr").
                         }
                 """;
-        //Perform the query on the following URL: https://query.wikidata.org/sparql
-        //The query shall be passed as request parameter (named query)
-
-        //Generate html file from response
+        HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
+        URL url = new URL("https://query.wikidata.org/sparql?query=" + URLEncoder.encode(query, "UTF-8"));
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(url.toURI()).header("Accept", "application/xml").build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        //TODO: generate html file from response
     }
 }

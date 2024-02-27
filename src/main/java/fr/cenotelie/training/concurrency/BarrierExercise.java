@@ -8,8 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 class Operation extends Thread {
 
-    public static int num = 1;
+    public static int num = 2;
     private static Lock lock = new ReentrantLock();
+    private static CyclicBarrier barrier = new CyclicBarrier(10);
 
     public Operation(String name) {
         this.setName(name);
@@ -17,14 +18,36 @@ class Operation extends Thread {
 
     @Override
     public void run() {
-        //TODO
+        if ("mult".equalsIgnoreCase(getName())) {
+            lock.lock();
+            num *= 2;
+            lock.unlock();
+            try {
+                barrier.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                barrier.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+            lock.lock();
+            num += 5;
+            lock.unlock();
+        }
     }
 }
 public class BarrierExercise {
 
     public static void main(String[] args) throws InterruptedException {
-        Operation[] ops = new Operation[9];
-        for (int i = 0; i < 9; i++) {
+        Operation[] ops = new Operation[10];
+        for (int i = 0; i < 10; i++) {
             if (i % 2 == 0) {
                 ops[i] = new Operation("mult");
             } else {

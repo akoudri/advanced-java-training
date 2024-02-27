@@ -6,7 +6,11 @@ import java.util.regex.Pattern;
 public record Customer(int pClass, boolean survived, String name, Sex sex, double age) {
 
     public String[] fullName() {
-        //TODO: use patterns to compute full name
+        Pattern p = Pattern.compile("(\\w+), (\\w+)\\. (.*)");
+        Matcher m = p.matcher(name);
+        if (m.find()) {
+            return new String[] { m.group(2), m.group(1), m.group(3)};
+        }
         return null;
     }
 

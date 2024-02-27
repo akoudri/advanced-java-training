@@ -31,17 +31,12 @@ public class Internationalisation {
     }
 
     public static void main(String[] args) {
-        //Get the user's preferred locale
-
-        //Get the messages for the user's locale
-
-        //Get the template file content
-
-        //Format the greeting message
-
-        //Replace the placeholder with the greeting message
-
-        //Write the result to a file
-
+        Locale userLocale = Locale.getDefault(); //preferred locale
+        ResourceBundle messages = ResourceBundle.getBundle("Message", userLocale);
+        String fileContent = readFile("hello_template.txt");
+        String greeting = messages.getString("greeting");
+        String formattedGreeting = MessageFormat.format(greeting, System.getenv("USER"));
+        String replacedContent = fileContent.replace("{greeting}", formattedGreeting);
+        writeToFile("hello.txt", replacedContent);
     }
 }

@@ -62,7 +62,51 @@ public class DatabaseAccess {
     }
 
     public static void feedDatabase() {
-        //TODO: feed the database with movies
+        Properties props = new Properties();
+        try {
+            props.load(DatabaseAccess.class.getResourceAsStream("/db.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Connection connection = DriverManager.getConnection(props.getProperty("url"));
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS movies (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        title VARCHAR(255),
+                        director VARCHAR(255),
+                        description CHARACTER LARGE OBJECT,
+                        genre VARCHAR(255),
+                        release VARCHAR(255),
+                        CONSTRAINT u_cst_1 UNIQUE(title, director)
+                    )
+                """);
+
+            List<Movie> movies = new ArrayList<>();
+            movies.addAll(retreiveMovies("Quentin", "Tarantino"));
+            movies.addAll(retreiveMovies("Steven", "Spielberg"));
+            movies.addAll(retreiveMovies("Wes", "Anderson"));
+            movies.addAll(retreiveMovies("George", "Lucas"));
+            movies.addAll(retreiveMovies("David", "Fincher"));
+
+            movies.forEach( m -> {
+                try {
+                    statement.executeUpdate(
+                            "INSERT INTO movies (title, director, description, genre, release) VALUES ('" +
+                                    m.title().replace("'", "''") + "', '" +
+                                    m.director() + "', '" +
+                                    m.description() + "', '" +
+                                    m.genre() + "', '" +
+                                    m.release() +
+                                    "')");
+                } catch (SQLException e) {
+                    System.out.println("Duplicate movie " + m.title());
+                }
+            });
+
+        } catch (SQLException | URISyntaxException | IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {

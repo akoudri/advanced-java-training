@@ -1,6 +1,7 @@
 package fr.cenotelie.training.concurrency;
 
 import java.util.Random;
+import java.util.concurrent.*;
 
 public class MatrixProd {
 
@@ -19,16 +20,70 @@ public class MatrixProd {
     }
 
     public int[][] seqProduct() {
+        assert numColsA == numRowsB;
         int[][] C = new int[numRowsA][numColsB];
-        //TODO: perform computation
+        for (int i = 0; i < numRowsA; i++) {
+            for (int j = 0; j < numColsB; j++) {
+                int sum = 0;
+                for (int k = 0; k < numColsA; k++) {
+                    sum += A[i][k] * B[k][j];
+                }
+                C[i][j] = sum;
+            }
+        }
         return C;
     }
 
     public int[][] parProduct() {
+        int numWorkers = Runtime.getRuntime().availableProcessors();
+        ExecutorService pool = Executors.newFixedThreadPool(numWorkers);
+        int chunkSize = (int) Math.ceil((double) numRowsA / numWorkers);
+        Future<int[][]>[] futures = new Future[numWorkers];
+        for (int i = 0; i < numWorkers; i++) {
+            int start = Math.min(i * chunkSize, numRowsA);
+            int end = Math.min((i + 1) * chunkSize, numRowsA);
+            futures[i] = pool.submit(new ParallelWorker(start, end));
+        }
         int[][] C = new int[numRowsA][numColsB];
-        //TODO: create thread pool
-        // and merge partial results
+        try {
+            for (int i = 0; i < numWorkers; i++) {
+                int[][] partialC = futures[i].get();
+                for (int j = 0; j < partialC.length; j++) {
+                    for (int k = 0; k < numColsB; k++) {
+                        C[j + (i * chunkSize)][k] = partialC[j][k];
+                    }
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        pool.shutdown();
         return C;
+    }
+
+    private class ParallelWorker implements Callable<int[][]> {
+
+        private int rowStart, rowEnd;
+
+        public ParallelWorker(int rowStart, int rowEnd) {
+            this.rowStart = rowStart;
+            this.rowEnd = rowEnd;
+        }
+
+        @Override
+        public int[][] call() throws Exception {
+            int[][] C = new int[rowEnd-rowStart][numColsB];
+            for (int i = 0; i < rowEnd-rowStart; i++) {
+                for (int j = 0; j < numColsB; j++) {
+                    int sum = 0;
+                    for (int k = 0; k < numColsA; k++) {
+                        sum += A[i+rowStart][k] * B[k][j];
+                    }
+                    C[i][j] = sum;
+                }
+            }
+            return C;
+        }
     }
 
     public static int[][] generateRandomMatrix(int M, int N) {

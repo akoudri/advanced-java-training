@@ -20,7 +20,7 @@ public class Teeing {
                         Collectors.maxBy(Comparator.comparing(Employee::salary)),
                         Collectors.minBy(Comparator.comparing(Employee::salary)),
                         (e1, e2) -> {
-                            HashMap<String, Employee> map = new HashMap();
+                            HashMap<String, Employee> map = new HashMap<>();
                             map.put("MAX", e1.get());
                             map.put("MIN", e2.get());
                             return map;
@@ -31,8 +31,14 @@ public class Teeing {
 
     public static void exercise() {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        //TODO: Complete
-        Result result = null;
+        Result result = numbers.stream()
+                .collect(Collectors.teeing(
+                        Collectors.filtering(n -> n % 2 == 0, Collectors.averagingInt(Integer::intValue)),
+                        Collectors.filtering(n -> n % 2 != 0, Collectors.averagingInt(Integer::intValue)),
+                        (evenAverage, oddAverage) -> new Result(evenAverage, oddAverage)
+                ));
+        System.out.println("Average of even numbers: " + result.getEvenAverage());
+        System.out.println("Average of odd numbers: " + result.getOddAverage());
     }
 
     public static void main(String[] args) {

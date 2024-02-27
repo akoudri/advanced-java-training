@@ -8,34 +8,52 @@ import java.security.NoSuchAlgorithmException;
 public class Security {
 
     public static void main(String[] args) {
-        // Generate a secret key
+        try {
+            // Generate a secret key
+            SecretKey secretKey = generateSecretKey();
 
-        // Encrypt the data
+            // Encrypt the data
+            String plainText = "Hello, World!";
+            byte[] encryptedData = encryptData(plainText, secretKey);
+            System.out.println("Encrypted data: " + byteArrayToHexString(encryptedData));
 
-        // Decrypt the data
+            // Decrypt the data
+            String decryptedText = decryptData(encryptedData, secretKey);
+            System.out.println("Decrypted data: " + decryptedText);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException |
+                 BadPaddingException e) {
+            e.printStackTrace();
+        }
     }
 
     private static SecretKey generateSecretKey() throws NoSuchAlgorithmException {
         // Generate a secret key using AES algorithm
-        return null;
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(128); // Key size: 128 bits
+        return keyGenerator.generateKey();
     }
 
     private static byte[] encryptData(String plainText, SecretKey secretKey) throws NoSuchAlgorithmException,
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         // Create a cipher object for encryption
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
         // Encrypt the plain text
-
-        return null;
+        byte[] encryptedData = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+        return encryptedData;
     }
 
     private static String decryptData(byte[] encryptedData, SecretKey secretKey) throws NoSuchAlgorithmException,
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         // Create a cipher object for decryption
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
         // Decrypt the encrypted data
-
-        return null;
+        byte[] decryptedData = cipher.doFinal(encryptedData);
+        return new String(decryptedData, StandardCharsets.UTF_8);
     }
 
     private static String byteArrayToHexString(byte[] byteArray) {
