@@ -1,9 +1,6 @@
 package fr.cenotelie.training.misc;
 
 import java.io.*;
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Internationalisation {
 
