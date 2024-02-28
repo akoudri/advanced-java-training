@@ -1,15 +1,11 @@
-package fr.cenotelie.training.misc;
+package fr.cenotelie.training.network;
 
-import com.sun.net.httpserver.*;
-import org.nfunk.jep.JEP;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 
 public class ArithmeticServer {
     public static void main(String[] args) throws IOException {
