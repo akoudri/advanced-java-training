@@ -1,7 +1,9 @@
 package fr.cenotelie.training.misc;
 
-import javax.crypto.*;
-import java.nio.charset.StandardCharsets;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
