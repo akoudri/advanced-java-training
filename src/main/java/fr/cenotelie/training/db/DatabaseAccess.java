@@ -23,6 +23,7 @@ public class DatabaseAccess {
 
     public static List<Movie> retreiveMovies(String firstname, String lastname) throws URISyntaxException, IOException, InterruptedException {
         List<Movie> movies = new ArrayList<>();
+        //TODO: test this query on https://query.wikidata.org/
         String query = String.format("""
                     SELECT DISTINCT ?movieLabel ?movieDescription ?directorLabel ?genreLabel ?release WHERE {
                         SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
@@ -62,6 +63,7 @@ public class DatabaseAccess {
 
     public static void feedDatabase() {
         //TODO: feed the database with movies
+        //TODO: use the db.properties file to get the database connection properties
     }
 
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
