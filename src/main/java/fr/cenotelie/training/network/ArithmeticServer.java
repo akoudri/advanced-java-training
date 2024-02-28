@@ -1,4 +1,4 @@
-package fr.cenotelie.training.misc;
+package fr.cenotelie.training.network;
 
 import com.sun.net.httpserver.*;
 import org.nfunk.jep.JEP;
