@@ -37,6 +37,7 @@ class EndSubscriber<T> implements Flow.Subscriber<T> {
     @Override
     public void onComplete() {
         System.out.println("Subscriber done");
+        consumedElements.forEach(System.out::println);
     }
 }
 
@@ -85,5 +86,6 @@ public class ReactiveDemo {
             publisher.submit(i);
         }
         publisher.close();
+        Thread.sleep(5000);
     }
 }

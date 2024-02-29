@@ -9,7 +9,7 @@ public class MonitorDining {
     private static final int TOTAL_SWEETS = 20;
     private static final Lock lock = new ReentrantLock();
     private static final Condition canEat = lock.newCondition();
-    private static int sweetsLeft = TOTAL_SWEETS;
+    private static volatile int sweetsLeft = TOTAL_SWEETS; // Make sweetsLeft volatile for visibility
 
     public static void main(String[] args) throws InterruptedException {
         Thread[] philosophers = new Thread[5];
@@ -31,26 +31,28 @@ public class MonitorDining {
 
         @Override
         public void run() {
-            while (sweetsLeft >= 0) {
+            while (true) { // Change to an infinite loop to rely on internal break
                 lock.lock();
                 try {
                     while (sweetsLeft == 0) {
-                        canEat.await(); // Philosophers wait here if no sweets are left
+                        canEat.await();
+                        // Upon waking, immediately check if we should exit
+                        if (sweetsLeft == 0) {
+                            return; // Exit thread if there are no sweets left
+                        }
                     }
-                    if (sweetsLeft <= 0) {
-                        break;
-                    }
-                    // Exit condition: Check after being awakened in case all sweets are done.
-                    sweetsLeft--; // A sweet is consumed
+                    sweetsLeft--;
                     System.out.println(Thread.currentThread().getName() + " ate a sweet. Sweets left: " + sweetsLeft);
 
-                    // After consuming a sweet, signal others that they might be able to eat now.
-                    canEat.signalAll();
+                    if (sweetsLeft > 0) {
+                        canEat.signal(); // Wake up one philosopher
+                    } else {
+                        canEat.signalAll(); // Wake up all philosophers to exit
+                    }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.out.println(Thread.currentThread().getName() + " was interrupted.");
-                    // Exit the loop and end the thread upon interruption.
-                    return;
+                    return; // Exit thread upon interruption
                 } finally {
                     lock.unlock();
                 }
