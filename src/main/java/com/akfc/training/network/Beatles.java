@@ -1,11 +1,5 @@
 package com.akfc.training.network;
 
-import java.net.URL;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
 public class Beatles {
 
     public static void main(String[] args) throws Exception {

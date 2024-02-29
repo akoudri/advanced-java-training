@@ -25,7 +25,7 @@ public class DiningPhilosophers {
 
         @Override
         public void run() {
-            //Get forks, eat one sweet and release the fork
+            //Get forks, eat one sweet and release the forks
             //Do it while there is any food left
 
         }
