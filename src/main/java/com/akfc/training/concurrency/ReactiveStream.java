@@ -51,7 +51,7 @@ class TransformerProcessor<T, R> extends SubmissionPublisher<R> implements Flow.
     }
 }
 
-public class ReactiveDemo {
+public class ReactiveStream {
     public static void main(String[] argv) throws InterruptedException {
         //TODO: instanciate publisher, transformer and subscriber
         //Connect them and run the chain
