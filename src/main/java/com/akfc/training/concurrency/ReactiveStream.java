@@ -74,7 +74,7 @@ class TransformerProcessor<T, R> extends SubmissionPublisher<R> implements Flow.
     }
 }
 
-public class ReactiveDemo {
+public class ReactiveStream {
     public static void main(String[] argv) throws InterruptedException {
         SubmissionPublisher<Integer> publisher = new SubmissionPublisher<>();
         TransformerProcessor<Integer, Integer> transformerProcessor = new TransformerProcessor<>(e -> e * e);
