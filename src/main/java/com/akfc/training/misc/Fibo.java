@@ -1,5 +1,7 @@
 package com.akfc.training.misc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import static java.lang.Math.*;
 
@@ -45,14 +47,30 @@ public class Fibo {
         System.out.println();
     }
 
+    public List<Long> getEvenNumbers(int n) {
+        assert n > 2;
+        List<Long> res = new ArrayList<>();
+        double or3 = pow((sqrt(5) + 1)/2, 3);
+        long num = 2;
+        while (num <= n) {
+            res.add(num);
+            num = round(num * or3);
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         Fibo fibo = new Fibo();
-        int n = 50;
-        long start = System.currentTimeMillis();
+        /*long start = System.currentTimeMillis();
         long res = fibo.slide(n);
         long duration = System.currentTimeMillis() - start;
         System.out.format("Computed %d in %d ms\n", res, duration);
-        fibo.displayEvenNumbers(200);
+        fibo.displayEvenNumbers(200);*/
+        long start = System.currentTimeMillis();
+        List<Long> res = fibo.getEvenNumbers(200);
+        long duration = System.currentTimeMillis() - start;
+        System.out.format("Computed %d in %d ms\n", res.size(), duration);
+        res.forEach(System.out::println);
     }
 
 }
