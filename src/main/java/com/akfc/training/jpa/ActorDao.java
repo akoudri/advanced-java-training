@@ -3,11 +3,12 @@ package com.akfc.training.jpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.h2.tools.Server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 public class ActorDao {
 
@@ -46,42 +47,37 @@ public class ActorDao {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
+        H2Console h2Console = new H2Console();
+        h2Console.start();
         ActorDao actorDao = new ActorDao();
         Actor actor = new Actor();
-        actor.setFirstname("John");
-        actor.setLastname("Doe");
+        //TODO: set actor properties
+        //actor.setFirstname("John");
+        //actor.setLastname("Doe");
         Actor a = actorDao.create(actor);
         System.out.println("Actor created: " + a);
         actorDao.findAll().forEach(System.out::println);
-        H2Console h2Console = new H2Console();
-        h2Console.start();
-        h2Console.join();
+        //TODO:
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            reader.readLine();
+            h2Console.join();
+            System.out.println("Exiting the application...");
+            System.exit(0);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     static class H2Console extends Thread {
+
         @Override
         public void run() {
-            Server server = null;
             try {
-                // Start the H2 Console server
-                server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082");
-                server.start();
-                System.out.println("H2 Console started at http://localhost:8082");
-                System.out.println("Press any key to stop the server and exit...");
-
-                // Wait for any key press
-                Scanner scanner = new Scanner(System.in);
-                scanner.nextLine();
-
+                org.h2.tools.Console.main();
             } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                // Stop the H2 Console server
-                if (server != null) {
-                    server.stop();
-                    System.out.println("H2 Console server stopped.");
-                }
+                throw new RuntimeException(e);
             }
         }
     }
