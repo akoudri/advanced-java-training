@@ -58,7 +58,7 @@ public class ActorDao {
         Actor a = actorDao.create(actor);
         System.out.println("Actor created: " + a);
         actorDao.findAll().forEach(System.out::println);
-        //TODO:
+        //TODO: Get actors from semantic web
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             reader.readLine();
