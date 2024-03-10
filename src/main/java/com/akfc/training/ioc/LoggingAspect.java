@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 @Aspect
 public class LoggingAspect {
@@ -18,7 +20,17 @@ public class LoggingAspect {
 
     @Before("executeLogging()")
     public void beforeMethodCall(JoinPoint joinPoint) {
-        LOGGER.info("" + joinPoint.getSignature().getName());
+        if (joinPoint.getArgs().length == 0) {
+            LOGGER.info("{} called", joinPoint.getSignature().getName());
+        }
+        else {
+            String[] args = Arrays.stream(joinPoint.getArgs())
+                    .map(Object::toString)
+                    .toArray(String[]::new);
+            LOGGER.info("{} called with value {}",
+                    joinPoint.getSignature().getName(),
+                    String.join(", ", args));
+        }
     }
 
     @Around(value = "executeLogging()")
