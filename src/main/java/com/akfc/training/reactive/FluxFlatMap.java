@@ -3,7 +3,7 @@ package com.akfc.training.reactive;
 import com.github.javafaker.Faker;
 import reactor.core.publisher.Flux;
 
-public class FluxFlatMap {
+public class    FluxFlatMap {
 
     private static Faker faker = new Faker();
 

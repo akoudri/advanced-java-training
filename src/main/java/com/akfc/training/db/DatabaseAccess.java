@@ -4,7 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -24,6 +27,7 @@ public class DatabaseAccess {
 
     public static List<Movie> retreiveMovies(String firstname, String lastname) throws URISyntaxException, IOException, InterruptedException {
         List<Movie> movies = new ArrayList<>();
+        //TODO: test this query on https://query.wikidata.org/
         String query = String.format("""
                     SELECT DISTINCT ?movieLabel ?movieDescription ?directorLabel ?genreLabel ?release WHERE {
                         SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
@@ -61,16 +65,13 @@ public class DatabaseAccess {
         return movies;
     }
 
-    public static void feedDatabase() {
+    public static void feedDatabase() throws IOException {
         Properties props = new Properties();
-        try {
-            props.load(DatabaseAccess.class.getResourceAsStream("/db.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (Connection connection = DriverManager.getConnection(props.getProperty("url"));
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate("""
+        props.load(DatabaseAccess.class.getResourceAsStream("/db.properties"));
+        try (
+                Connection conn = DriverManager.getConnection(props.getProperty("url"));
+                Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("""
                     CREATE TABLE IF NOT EXISTS movies (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         title VARCHAR(255),
@@ -80,32 +81,28 @@ public class DatabaseAccess {
                         release VARCHAR(255),
                         CONSTRAINT u_cst_1 UNIQUE(title, director)
                     )
-                """);
-
+                    """);
             List<Movie> movies = new ArrayList<>();
             movies.addAll(retreiveMovies("Quentin", "Tarantino"));
             movies.addAll(retreiveMovies("Steven", "Spielberg"));
             movies.addAll(retreiveMovies("Wes", "Anderson"));
             movies.addAll(retreiveMovies("George", "Lucas"));
             movies.addAll(retreiveMovies("David", "Fincher"));
-
-            movies.forEach( m -> {
-                try {
-                    statement.executeUpdate(
-                            "INSERT INTO movies (title, director, description, genre, release) VALUES ('" +
-                                    m.title().replace("'", "''") + "', '" +
-                                    m.director() + "', '" +
-                                    m.description() + "', '" +
-                                    m.genre() + "', '" +
-                                    m.release() +
-                                    "')");
-                } catch (SQLException e) {
-                    System.out.println("Duplicate movie " + m.title());
-                }
-            });
-
-        } catch (SQLException | URISyntaxException | IOException | InterruptedException e) {
-            e.printStackTrace();
+            for (Movie m : movies) {
+                String query = String.format("""
+                        INSERT INTO movies (title, director, description, genre, release)
+                        VALUES ('%s', '%s', '%s', '%s', '%s')
+                        """,
+                        m.title().replace("'", "''"),
+                        m.director(),
+                        m.description().replace("'", "''"),
+                        m.genre().replace("'", "''"),
+                        m.release()
+                );
+                stmt.executeUpdate(query);
+            }
+        } catch (SQLException | URISyntaxException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -139,4 +136,3 @@ public class DatabaseAccess {
     }
 
 }
-

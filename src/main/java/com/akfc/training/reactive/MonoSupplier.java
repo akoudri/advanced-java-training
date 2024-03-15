@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-public class MonoSupplier {
+public class    MonoSupplier {
 
     private static Faker faker = new Faker();
 

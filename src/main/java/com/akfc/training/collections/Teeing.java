@@ -69,4 +69,6 @@ public class Teeing {
             return oddAverage;
         }
     }
+
+    record Pair(Integer x, Integer y){}
 }
