@@ -18,7 +18,7 @@ public class Beatles {
                 """;
         HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
         URL url = new URL("https://query.wikidata.org/sparql?query=" + URLEncoder.encode(query, "UTF-8"));
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(url.toURI()).header("Accept", "application/xml").build();
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(url.toURI()).header("Accept", "application/json").build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
         //TODO: generate html file from response
