@@ -1,5 +1,7 @@
 package com.akfc.training.misc;
 
+import java.util.List;
+
 public class Fibo {
 
     long recursive(int n) {
@@ -8,7 +10,12 @@ public class Fibo {
     }
 
     void displayEvenNumbers(int n) {
+        //TODO
+    }
 
+    List<Long> getEvenNumbers(int n) {
+        //TODO
+        return null;
     }
 
     public static void main(String[] args) {

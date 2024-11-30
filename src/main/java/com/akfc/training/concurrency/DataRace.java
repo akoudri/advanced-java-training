@@ -13,6 +13,7 @@ public class DataRace {
             t[i] = new SimpleCounter();
             t[i].start();
         }
+        //Question: Why is it important to join threads? What happens if we don't join threads?
         for (int i = 0; i < 2; i++) {
             t[i].join();
         }
@@ -53,7 +54,7 @@ public class DataRace {
 
         @Override
         public void run() {
-            for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < 10; i++) {
                 counter ++;
             }
         }

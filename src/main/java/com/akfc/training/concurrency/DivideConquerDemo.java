@@ -9,14 +9,14 @@ public class DivideConquerDemo {
     public static void main(String[] argv) {
         long total = 0;
         long start = System.currentTimeMillis();
-        for (long i = 0; i <= 10_000; i++) {
+        for (long i = 0; i <= 1_000_000; i++) {
             total += i;
         }
         long duration = System.currentTimeMillis() - start;
         System.out.println(total + " computed in " + duration + " ms");
         ForkJoinPool pool = ForkJoinPool.commonPool();
         start = System.currentTimeMillis();
-        total = pool.invoke(new RecursiveSum(0, 10_000));
+        total = pool.invoke(new RecursiveSum(0, 1_000_000));
         duration = System.currentTimeMillis() - start;
         pool.shutdown();
         System.out.println(total + " computed in " + duration + " ms");
