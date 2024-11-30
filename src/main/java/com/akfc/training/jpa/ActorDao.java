@@ -21,30 +21,23 @@ public class ActorDao {
     }
 
     public Actor create(Actor actor) {
-        em.getTransaction().begin();
-        em.persist(actor);
-        em.getTransaction().commit();
-        return actor;
+        return null;
     }
 
     public Actor findById(Long id) {
-        return em.find(Actor.class, id);
+        return null;
     }
 
     public List<Actor> findAll() {
-        return em.createQuery("SELECT a FROM Actor a", Actor.class).getResultList();
+        return null;
     }
 
     public Actor update(Actor actor) {
-        return em.merge(actor);
+        return null;
     }
 
     public void delete(Actor actor) {
-        if (em.contains(actor)) {
-            em.remove(actor);
-        } else {
-            em.remove(em.merge(actor));
-        }
+        //TODO
     }
 
     public static void main(String[] args) {
