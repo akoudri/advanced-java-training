@@ -29,7 +29,34 @@ public class DataRace {
             t[i].join();
         }
         System.out.println(AtomicCounter.counter);*/
-        SynchronizedCounter4[] t = new SynchronizedCounter4[2];
+        /*SynchronizedCounter1[] t = new SynchronizedCounter1[2];
+        for (int i = 0; i < 2; i++) {
+            t[i] = new SynchronizedCounter1();
+            t[i].start();
+        }
+        for (int i = 0; i < 2; i++) {
+            t[i].join();
+        }
+        System.out.println(SynchronizedCounter1.counter);*/
+        /*SynchronizedCounter2[] t = new SynchronizedCounter2[2];
+        for (int i = 0; i < 2; i++) {
+            t[i] = new SynchronizedCounter2();
+            t[i].start();
+        }
+        for (int i = 0; i < 2; i++) {
+            t[i].join();
+        }
+        System.out.println(SynchronizedCounter2.counter);*/
+        /*SynchronizedCounter3[] t = new SynchronizedCounter3[2];
+        for (int i = 0; i < 2; i++) {
+            t[i] = new SynchronizedCounter3();
+            t[i].start();
+        }
+        for (int i = 0; i < 2; i++) {
+            t[i].join();
+        }
+        System.out.println(SynchronizedCounter3.counter);*/
+        /*SynchronizedCounter4[] t = new SynchronizedCounter4[2];
         for (int i = 0; i < 2; i++) {
             t[i] = new SynchronizedCounter4();
             t[i].start();
@@ -37,17 +64,35 @@ public class DataRace {
         for (int i = 0; i < 2; i++) {
             t[i].join();
         }
-        System.out.println(SynchronizedCounter4.counter);
-        /*CounterThread[] t = new CounterThread[10];
+        System.out.println(SynchronizedCounter4.counter);*/
+        /*ReentrantCounter[] t = new ReentrantCounter[5];
+        for (int i = 0; i < 5; i++) {
+            t[i] = new ReentrantCounter();
+            t[i].start();
+        }
+        for (int i = 0; i < 5; i++) {
+            t[i].join();
+        }
+        System.out.println(ReentrantCounter.counter);*/
+        /*NonBlockingReentrantCounter[] t = new NonBlockingReentrantCounter[5];
+        for (int i = 0; i < 5; i++) {
+            t[i] = new NonBlockingReentrantCounter();
+            t[i].start();
+        }
+        for (int i = 0; i < 5; i++) {
+            t[i].join();
+        }
+        System.out.println(NonBlockingReentrantCounter.counter);*/
+        RWCounterThread[] t = new RWCounterThread[10];
         for (int i = 0; i < 10; i++) {
-            if (i < 8) t[i] = new CounterThread(CounterThread.READER);
-            else t[i] = new CounterThread(CounterThread.WRITER);
+            if (i < 8) t[i] = new RWCounterThread(RWCounterThread.READER);
+            else t[i] = new RWCounterThread(RWCounterThread.WRITER);
             t[i].start();
         }
         for (int i = 0; i < 10; i++) {
             t[i].join();
         }
-        System.out.println(CounterThread.counter);*/
+        System.out.println(RWCounterThread.counter);
     }
 
     static class SimpleCounter extends Thread {
@@ -74,14 +119,20 @@ public class DataRace {
 
     static class SynchronizedCounter1 extends Thread {
         static int counter = 0;
+        static Integer lock = 0;
 
         @Override
         public void run() {
             for (int i = 0; i < 1000000; i++) {
-                synchronized (SynchronizedCounter1.class) {
+                synchronized (lock) {
                     counter ++;
                 }
             }
+            /*synchronized (lock) {
+                for (int i = 0; i < 1000000; i++) {
+                    counter++;
+                }
+            }*/
         }
     }
 
@@ -95,6 +146,7 @@ public class DataRace {
                     counter ++;
                 }
             }
+
         }
     }
 
@@ -119,7 +171,7 @@ public class DataRace {
             }
         }
 
-        private synchronized void increment() {
+        private static synchronized void increment() {
             counter ++;
         }
     }
@@ -132,11 +184,11 @@ public class DataRace {
         public void run() {
             //TODO: lock outside vs inside loop
             lock.lock();
-            System.out.format("%s taking lock", this.getName());
+            System.out.format("%s taking lock\n", this.getName());
             for (int i = 0; i < 10; i++) {
                 counter ++;
             }
-            System.out.format("%s releasing lock", this.getName());
+            System.out.format("%s releasing lock\n", this.getName());
             lock.unlock();
         }
     }
