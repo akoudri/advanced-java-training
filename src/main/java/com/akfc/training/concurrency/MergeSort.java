@@ -2,7 +2,7 @@ package com.akfc.training.concurrency;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.RecursiveAction;
 
 class SequentialMergeSorter {
 
