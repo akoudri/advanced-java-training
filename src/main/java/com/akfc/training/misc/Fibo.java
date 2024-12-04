@@ -22,16 +22,17 @@ public class Fibo {
         return res;
     }
 
-    long slide(int n) {
+    public long slide(int n) {
         assert n > 0;
         if (n <= 2) return 1;
         long a, b, somme;
+        a = 1;
         b = 1;
-        somme = 2;
-        for (int i = 3; i < n; i++) {
+        somme = 0;
+        for (int i = 1; i < n; i++) {
+            somme = a + b;
             a = b;
             b = somme;
-            somme = a + b;
         }
         return somme;
     }
