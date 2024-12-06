@@ -5,14 +5,19 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class DiningPhilosophers {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Lock fourchette1 = new ReentrantLock();
         Lock fourchette2 = new ReentrantLock();
         Lock fourchette3 = new ReentrantLock();
-        new Philosopher("Socrate", fourchette1, fourchette2).start();
-        new Philosopher("Platon", fourchette2, fourchette3).start();
-        //new Philosopher("Kant", fourchette3, fourchette1).start(); //First case of DEADLOCK !!!
-        new Philosopher("Kant", fourchette1, fourchette3).start(); //NO DEADLOCK
+        Philosopher socrate = new Philosopher("Socrate", fourchette1, fourchette2);
+        Philosopher platon = new Philosopher("Platon", fourchette2, fourchette3);
+        Philosopher kant = new Philosopher("Kant", fourchette1, fourchette3);
+        socrate.start();
+        platon.start();
+        kant.start();
+        socrate.join();
+        platon.join();
+        kant.join();
     }
 
     static class Philosopher extends Thread {

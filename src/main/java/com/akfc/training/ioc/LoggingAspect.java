@@ -15,7 +15,10 @@ public class LoggingAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
 
-    @Pointcut("@annotation(Loggable)")
+//    @Pointcut("@annotation(Loggable)")
+//    public void executeLogging(){}
+
+    @Pointcut("execution(* get*(..))")
     public void executeLogging(){}
 
     @Before("executeLogging()")
