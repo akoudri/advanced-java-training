@@ -29,6 +29,16 @@ public class Teeing {
         System.out.println(result);
     }
 
+    public static void example2() {
+        List<Employee> employeeList = Arrays.asList(
+                new Employee(1, "A", 100),
+                new Employee(2, "B", 200),
+                new Employee(3, "C", 300),
+                new Employee(4, "D", 400));
+
+        employeeList.stream().collect(Collectors.filtering(e -> e.salary > 200, Collectors.toList())).forEach(System.out::println);
+    }
+
     public static void exercise() {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Result result = numbers.stream()
@@ -41,9 +51,28 @@ public class Teeing {
         System.out.println("Average of odd numbers: " + result.getOddAverage());
     }
 
+    public static void exercise2() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        HashMap<String, List<Integer>> result = numbers.stream()
+                .collect(Collectors.teeing(
+                        Collectors.filtering(n -> n % 2 == 0, Collectors.toList()),
+                        Collectors.filtering(n -> n % 2 != 0, Collectors.toList()),
+                        (even, odd) -> {
+                            HashMap<String, List<Integer>> map = new HashMap<>();
+                            map.put("EVEN", even);
+                            map.put("ODD", odd);
+                            return map;
+                        }
+                ));
+        System.out.println("Even numbers: " + result.get("EVEN"));
+        System.out.println("Odd numbers: " + result.get("ODD"));
+    }
+
     public static void main(String[] args) {
         //example();
-        exercise();
+        //example2();
+        //exercise();
+        exercise2();
     }
 
     public record Employee(
