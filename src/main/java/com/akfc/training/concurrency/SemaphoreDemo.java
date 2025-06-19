@@ -13,7 +13,7 @@ public class SemaphoreDemo {
 
     static class SemThread extends Thread {
         String name;
-        private static Semaphore sem = new Semaphore(1); //TODO: change the capacity and observe the results
+        private static Semaphore sem = new Semaphore(3); //TODO: change the capacity and observe the results
 
         SemThread(String name) {
             this.name = name;

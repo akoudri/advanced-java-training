@@ -38,4 +38,13 @@ public class CalculatorTest {
         );
     }
 
+    @Test
+    void testSQrt() {
+        double x = 25.0;
+        double epsilon = 0.0001;
+        double expected = 5.0;
+        double result = calculator.sqrt(x, epsilon);
+        assertEquals(expected, result, epsilon, "La racine carrée de " + x + " doit être " + expected);
+    }
+
 }

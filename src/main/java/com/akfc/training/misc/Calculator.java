@@ -31,6 +31,20 @@ public class Calculator {
         return factors;
     }
 
+    public double sqrt(double x, double epsilon) {
+        if (x < 0) {
+            throw new IllegalArgumentException("Cannot compute square root of a negative number");
+        }
+        if (epsilon <= 0) {
+            throw new IllegalArgumentException("Epsilon must be positive");
+        }
+        double guess = x / 2.0;
+        while (Math.abs(guess * guess - x) > epsilon) {
+            guess = (guess + x / guess) / 2.0;
+        }
+        return guess;
+    }
+
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
         System.out.println(calculator.pgcd(12, 18));
