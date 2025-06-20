@@ -1,6 +1,5 @@
-package com.akfc.training;
+package com.akfc.training.misc;
 
-import com.akfc.training.misc.Fibo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
