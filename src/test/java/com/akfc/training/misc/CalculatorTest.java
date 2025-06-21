@@ -1,6 +1,5 @@
-package com.akfc.training;
+package com.akfc.training.misc;
 
-import com.akfc.training.misc.Calculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

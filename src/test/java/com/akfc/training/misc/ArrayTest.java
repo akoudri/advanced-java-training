@@ -1,6 +1,5 @@
-package com.akfc.training;
+package com.akfc.training.misc;
 
-import com.akfc.training.misc.Array;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,7 +1,5 @@
-package com.akfc.training;
+package com.akfc.training.misc;
 
-import com.akfc.training.misc.Repository;
-import com.akfc.training.misc.Service;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 
