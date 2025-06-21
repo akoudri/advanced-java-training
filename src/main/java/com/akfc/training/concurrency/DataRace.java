@@ -119,7 +119,7 @@ public class DataRace {
 
     static class SynchronizedCounter1 extends Thread {
         static int counter = 0;
-        static Integer lock = 0;
+        static final Object lock = new Object();
 
         @Override
         public void run() {
