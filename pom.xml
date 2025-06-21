@@ -125,6 +125,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M9</version>
                 <configuration>
+                    <argLine>--enable-preview --add-modules jdk.incubator.vector</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -135,6 +136,8 @@
                     <release>21</release>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
+                        <arg>--add-modules</arg>
+                        <arg>jdk.incubator.vector</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
