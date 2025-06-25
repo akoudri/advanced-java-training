@@ -14,6 +14,7 @@ public class Generics {
 
     //Afficher les sons d'une liste d'animaux en utilisant un paramètre générique.
     public static void afficherListe(List<? extends Animal> animaux) {
+        // animaux.add(new Cat());   // Ajout d'un animal dans la liste (non autorisé si l'argument est une sous-classe de Animal)
         animaux.forEach(Animal::makeSound);
     }
 
@@ -23,8 +24,10 @@ public class Generics {
         liste.add(3.14);    // Double
     }
 
-    static abstract class Animal {
-        public abstract void makeSound();
+    static class Animal {
+        public void makeSound() {
+            System.out.println("Hello");
+        }
     }
 
     static class Dog extends Animal {
@@ -39,6 +42,13 @@ public class Generics {
         public void makeSound() {
             System.out.println("Meow!");
         }
+    }
+
+    public static void main(String[] args) {
+        List<Cat> cats = List.of(new Cat(), new Cat());
+        afficherListe(cats);
+        List<Animal> animals = List.of(new Dog(), new Cat(), new Animal());
+        afficherListe(animals);
     }
 }
 
